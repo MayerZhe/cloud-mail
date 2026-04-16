@@ -9,6 +9,11 @@ app.delete('/user/delete', async (c) => {
 	return c.json(result.ok());
 });
 
+app.delete('/user/batchDelete', async (c) => {
+	await userService.batchPhysicsDelete(c, await c.req.json());
+	return c.json(result.ok());
+});
+
 app.put('/user/setPwd', async (c) => {
 	await userService.setPwd(c, await c.req.json());
 	return c.json(result.ok());
@@ -19,8 +24,23 @@ app.put('/user/setStatus', async (c) => {
 	return c.json(result.ok());
 });
 
+app.put('/user/batchSetStatus', async (c) => {
+	await userService.batchSetStatus(c, await c.req.json());
+	return c.json(result.ok());
+});
+
 app.put('/user/setType', async (c) => {
 	await userService.setType(c, await c.req.json());
+	return c.json(result.ok());
+});
+
+app.put('/user/resetSendCount', async (c) => {
+	await userService.resetSendCount(c, await c.req.json());
+	return c.json(result.ok());
+});
+
+app.put('/user/batchResetSendCount', async (c) => {
+	await userService.batchResetSendCount(c, await c.req.json());
 	return c.json(result.ok());
 });
 

@@ -1,0 +1,6 @@
+/*
+ * Copyright 2017, Yahoo Inc.
+ * Copyrights licensed under the New BSD License.
+ * See the accompanying LICENSE file for terms.
+ */
+Intl._timeZoneData.load({"zoneDefs":["Atlantic/Stanley||0,0,0,1,1,0,2,2,1,3,1,0,4,2,1,5,1,0,6,2,1,7,1,0,8,2,1,9,1,0,a,2,1,b,1,0,c,2,1,d,1,0,e,2,0,f,3,1,g,2,0,h,3,1,i,2,1,j,1,0,k,2,1,l,1,0,m,2,1,n,1,0,o,2,1,p,1,0,q,2,1,r,1,0,s,2,1,t,1,0,u,2,1,v,1,0,10,2,1,11,1,0,12,2,1,13,1,0,14,2,1,15,1,0,16,2,1,17,1,0,18,2,1,19,1,0,1a,2,1,1b,1,0,1c,2,1,1d,1,0,1e,2,1,1f,1,0,1g,2,1,1h,1,0,1i,2,1,1j,1,0,1k,2,1,1l,1,0,1m,2,1,1n,1,0,1o,2,1,1p,1,0,1q,2,1,1r,1,0,1s,2,1,1t,1,0,1u,2,1,1v,1,0,20,2,1,21,1,0,22,2,1,23,1,0,24,2,0"],"timeStamps":["-1mbn865","-ub19a1","-tsjv6h","-td1gq1","-suk6mh","-sef9m1","-s01vih","-rgfh61","-r2272h","-qifom1","-q42eih","-pkg061","-pcivmh","ch3vhv","ct7f5f","df3h0v","dqkp1f","ed39gv","fagmtf","fmkdhv","g8gfdf","gkk61v","h6g7tf","hijuhv","i4g0df","igjn1v","j327hf","jejfhv","k1201f","kd5mlv","kv1ohf","lb5f5v","lt1h1f","m957lv","mr19hf","n7505v","np121f","o54olv","onj95f","p3mvpv","plj1lf","q1mo9v","qjiq5f","qvmgpv","rhiilf","rtm99v","sfib5f","srm1pv","tdiamf","tp3imv","uc4hqf","un3b6v","va4aaf","vlliav","10842qf","10jlaqv","1163raf","11hl3av","1243jqf","12fkrqv","1323caf","13dkkav","140ljef","14c6rev","14ulbuf","15a6juv","15sl4ef","1686cev","1vvvvvv"],"offsets":[-232,-240,-180,-120]});

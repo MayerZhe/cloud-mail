@@ -97,6 +97,15 @@ const userService = {
 		await orm(c).delete(user).where(eq(user.userId, userId)).run();
 		await c.env.kv.delete(kvConst.AUTH_INFO + userId);
 	},
+	
+	async batchPhysicsDelete(c, params) {
+		const { userIds } = params
+		await accountService.physicsDeleteByUserIds(c, userIds)
+		await orm(c).delete(user).where(inArray(user.userId, userIds)).run();
+		for (const userId of userIds) {
+			await c.env.kv.delete(kvConst.AUTH_INFO + userId);
+		}
+	},
 
 	async list(c, params) {
 
@@ -251,6 +260,20 @@ const userService = {
 			await c.env.kv.delete(KvConst.AUTH_INFO + userId);
 		}
 	},
+	
+	async batchSetStatus(c, params) {
+		const { status, userIds } = params;
+		await orm(c)
+			.update(user)
+			.set({ status })
+			.where(inArray(user.userId, userIds))
+			.run();
+		if (status === userConst.status.BAN) {
+			for (const userId of userIds) {
+				await c.env.kv.delete(KvConst.AUTH_INFO + userId);
+			}
+		}
+	},
 
 	async setType(c, params) {
 
@@ -331,6 +354,11 @@ const userService = {
 
 	async resetSendCount(c, params) {
 		await orm(c).update(user).set({ sendCount: 0 }).where(eq(user.userId, params.userId)).run();
+	},
+	
+	async batchResetSendCount(c, params) {
+		const { userIds } = params;
+		await orm(c).update(user).set({ sendCount: 0 }).where(inArray(user.userId, userIds)).run();
 	},
 
 	async restore(c, params) {

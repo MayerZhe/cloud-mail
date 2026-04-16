@@ -41,3 +41,15 @@ export function userAllAccount(userId, num, size) {
 export function userDeleteAccount(accountId) {
     return http.delete('/user/deleteAccount', {params:{accountId}})
 }
+
+export function userBatchSetStatus(userIds, status) {
+    return http.put('/user/batchSetStatus', {userIds, status})
+}
+
+export function userBatchDelete(userIds) {
+    return http.delete('/user/batchDelete', {userIds})
+}
+
+export function userBatchResetSendCount(userIds) {
+    return http.put('/user/batchResetSendCount', {userIds})
+}

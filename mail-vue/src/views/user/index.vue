@@ -2,6 +2,21 @@
   <div class="user-box">
     <div class="header-actions">
       <Icon class="icon" icon="ion:add-outline" width="23" height="23" @click="openAdd"/>
+      <template v-if="selectedUsers.length > 0">
+        <el-dropdown trigger="click">
+          <el-button size="small" type="primary">
+            {{ $t('batchAction') }} ({{ selectedUsers.length }})
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="batchSetStatus(0)">{{ $t('btnBan') }}</el-dropdown-item>
+              <el-dropdown-item @click="batchSetStatus(1)">{{ $t('enable') }}</el-dropdown-item>
+              <el-dropdown-item @click="batchResetSendCount">{{ $t('reset') }}</el-dropdown-item>
+              <el-dropdown-item @click="batchDelete">{{ $t('delete') }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </template>
       <div class="search">
         <el-input
             v-model="params.email"
@@ -32,7 +47,9 @@
           <loading/>
         </div>
         <el-table
+            ref="tableRef"
             @filter-change="tableFilter"
+            @selection-change="handleSelectionChange"
             :empty-text="first ? '' : null"
             :default-expand-all="expandStatus"
             :data="users"
@@ -40,6 +57,7 @@
             style="width: 100%;"
             :key="key"
         >
+          <el-table-column type="selection" width="55"/>
           <el-table-column :width="expandWidth" type="expand">
             <template #default="props">
               <div class="details">
@@ -293,7 +311,10 @@ import {
   userRestSendCount,
   userRestore,
   userDeleteAccount,
-  userAllAccount
+  userAllAccount,
+  userBatchSetStatus,
+  userBatchDelete,
+  userBatchResetSendCount
 } from '@/request/user.js'
 import {roleSelectUse} from "@/request/role.js";
 import {Icon} from "@iconify/vue";
@@ -376,6 +397,12 @@ const accountParams = reactive({
   total: 0,
   userId: 0,
 })
+const tableRef = ref(null)
+const selectedUsers = ref([])
+
+function handleSelectionChange(selection) {
+  selectedUsers.value = selection
+}
 
 roleSelectUse().then(list => {
   roleList.length = 0
@@ -861,6 +888,111 @@ function getUserList(loading = true) {
       first.value = false
     }, 200)
   })
+}
+
+function batchSetStatus(status) {
+  const userIds = selectedUsers.value.filter(u => u.type !== 0).map(u => u.userId)
+  const emails = selectedUsers.value.filter(u => u.type !== 0).map(u => u.email).join(', ')
+  
+  if (userIds.length === 0) {
+    ElMessage({
+      message: t('没有可选用户'),
+      type: "warning",
+      plain: true
+    })
+    return
+  }
+  
+  ElMessageBox.confirm(t(status === 0 ? 'banRestore' : 'enableConfirm', {msg: emails}), {
+    confirmButtonText: t('confirm'),
+    cancelButtonText: t('cancel'),
+    type: 'warning'
+  }).then(() => {
+    userBatchSetStatus(userIds, status).then(() => {
+      selectedUsers.value.forEach(user => {
+        if (user.type !== 0) {
+          user.status = status
+        }
+      })
+      ElMessage({
+        message: t('saveSuccessMsg'),
+        type: "success",
+        plain: true
+      })
+      clearSelection()
+    })
+  });
+}
+
+function batchResetSendCount() {
+  const userIds = selectedUsers.value.filter(u => u.sendAction.hasPerm && u.sendAction.sendCount).map(u => u.userId)
+  const emails = selectedUsers.value.filter(u => u.sendAction.hasPerm && u.sendAction.sendCount).map(u => u.email).join(', ')
+  
+  if (userIds.length === 0) {
+    ElMessage({
+      message: t('没有可选用户'),
+      type: "warning",
+      plain: true
+    })
+    return
+  }
+  
+  ElMessageBox.confirm(t('reSendConfirm', {msg: emails}), {
+    confirmButtonText: t('confirm'),
+    cancelButtonText: t('cancel'),
+    type: 'warning'
+  }).then(() => {
+    userBatchResetSendCount(userIds).then(() => {
+      selectedUsers.value.forEach(user => {
+        if (user.sendAction.hasPerm && user.sendAction.sendCount) {
+          user.sendCount = 0
+        }
+      })
+      ElMessage({
+        message: t('reSuccessMsg'),
+        type: "success",
+        plain: true
+      })
+      clearSelection()
+    })
+  });
+}
+
+function batchDelete() {
+  const userIds = selectedUsers.value.filter(u => u.type !== 0).map(u => u.userId)
+  const emails = selectedUsers.value.filter(u => u.type !== 0).map(u => u.email).join(', ')
+  
+  if (userIds.length === 0) {
+    ElMessage({
+      message: t('没有可选用户'),
+      type: "warning",
+      plain: true
+    })
+    return
+  }
+  
+  ElMessageBox.confirm(t('delConfirm', {msg: emails}), {
+    confirmButtonText: t('confirm'),
+    cancelButtonText: t('cancel'),
+    type: 'warning'
+  }).then(() => {
+    userBatchDelete(userIds).then(() => {
+      ElMessage({
+        message: t('delSuccessMsg'),
+        type: "success",
+        plain: true
+      })
+      getUserList(false)
+      clearSelection()
+    })
+  });
+}
+
+function clearSelection() {
+  selectedUsers.value = []
+  if (tableRef.value) {
+    tableRef.value.clearSelection()
+  }
 }
 
 window.onresize = () => {

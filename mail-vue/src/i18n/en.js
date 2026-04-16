@@ -291,7 +291,10 @@ const en = {
     clear: 'Clear',
     include: 'Include',
     delAllEmailConfirm: 'Do you really want to delete it?',
-    s3Configuration: 'S3 Configuration'
+    s3Configuration: 'S3 Configuration',
+    batchAction: 'Batch Action',
+    enableConfirm: 'Confirm enabling {msg}?',
+    '没有可选用户': 'No eligible users selected'
 }
 
 export default en

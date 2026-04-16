@@ -291,7 +291,10 @@ const zh = {
     clear: '清除',
     include: '包含',
     delAllEmailConfirm: '确定要删除吗？',
-    s3Configuration: 'S3 配置'
+    s3Configuration: 'S3 配置',
+    batchAction: '批量操作',
+    enableConfirm: '确认启用 {msg} 吗？',
+    '没有可选用户': '没有可选用户'
 
 }
 export default zh
