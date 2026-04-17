@@ -12,6 +12,14 @@ const turnstileService = {
 
 		const settingRow = await settingService.query(c)
 
+		if (!settingRow.secretKey) {
+			throw new BizError('Turnstile secret key not configured', 500);
+		}
+
+		if (!settingRow.siteKey) {
+			throw new BizError('Turnstile site key not configured', 500);
+		}
+
 		const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
 			method: 'POST',
 			headers: {

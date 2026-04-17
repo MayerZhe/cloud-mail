@@ -110,9 +110,7 @@ const loginService = {
 
 		if (registerVerify === settingConst.registerVerify.COUNT) {
 			regVerifyOpen = await verifyRecordService.isOpenRegVerify(c, regVerifyCount);
-			if (regVerifyOpen) {
-				await turnstileService.verify(c,token)
-			}
+			await turnstileService.verify(c,token)
 		}
 
 		const { salt, hash } = await saltHashUtils.hashPassword(password);
